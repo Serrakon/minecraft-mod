@@ -1,0 +1,28 @@
+{
+	"java.import.gradle.wrapper.enabled": true,
+	"java.import.gradle.java.home": "/Users/sergej/Library/Java/JavaVirtualMachines/jdk-25.0.4.1+1/Contents/Home",
+	"java.configuration.runtimes": [
+		{
+			"name": "JavaSE-25",
+			"path": "/Users/sergej/Library/Java/JavaVirtualMachines/jdk-25.0.4.1+1/Contents/Home",
+			"default": true
+		}
+	],
+	"java.configuration.updateBuildConfiguration": "automatic",
+	"java.compile.nullAnalysis.mode": "disabled",
+	"files.exclude": {
+		"**/.gradle": true,
+		"**/bin": true
+	},
+	"search.exclude": {
+		"build": true,
+		"run": true,
+		".mc-sources": true
+	},
+	"files.watcherExclude": {
+		"**/.gradle/**": true,
+		"**/build/**": true,
+		"**/run/**": true,
+		"**/.mc-sources/**": true
+	}
+}

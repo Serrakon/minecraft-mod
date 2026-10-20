@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "${mod_id}",
+	"version": "${version}",
+	"name": "Particle Studio",
+	"description": "Visual editor for /particle command effects: layers, colors, shapes, preview, presets and .mcfunction export. Press J.",
+	"authors": [
+		"Sergey Kondratov"
+	],
+	"license": "MIT",
+	"icon": "assets/particlestudio/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"main": [
+			"com.sergej.particlestudio.ParticleStudio"
+		],
+		"client": [
+			"com.sergej.particlestudio.client.ParticleStudioClient"
+		],
+		"fabric-datagen": [
+			"com.sergej.particlestudio.client.datagen.ParticleStudioDataGenerator"
+		]
+	},
+	"mixins": [
+		"particlestudio.mixins.json",
+		{
+			"config": "particlestudio.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}

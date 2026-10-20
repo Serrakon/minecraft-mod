@@ -1,0 +1,10 @@
+{
+	"recommendations": [
+		"redhat.java",
+		"vscjava.vscode-java-debug"
+	],
+	"unwantedRecommendations": [
+		"vscjava.vscode-java-pack",
+		"vscjava.vscode-gradle"
+	]
+}

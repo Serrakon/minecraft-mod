@@ -1,0 +1,35 @@
+# gradle
+.gradle/
+build/
+out/
+classes/
+
+# vscode: в репозитории только общие настройки
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.settings/
+bin/
+.classpath
+.project
+.factorypath
+
+# idea
+.idea/
+*.iml
+
+# macos
+.DS_Store
+
+# fabric: dev-игра и декомпилированные исходники Minecraft
+run/
+.mc-sources/
+
+# java
+hs_err_*.log
+replay_*.log
+*.hprof
+*.jfr
+
+# служебный кэш datagen
+src/main/generated/.cache/
