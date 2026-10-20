@@ -29,7 +29,7 @@ Build, run and test through `scripts/*.sh` (macOS, JDK 25). Details are in [CLAU
 ./scripts/setup.sh     # JDK, dependencies, Minecraft sources
 ./scripts/run.sh       # game with the mod
 ./scripts/test.sh      # game tests with screenshots
-./scripts/release.sh   # GitHub Release with the jar (version from gradle.properties)
+./scripts/release.sh   # GitHub Release with the jar (version from gradle.properties; optional changes.md)
 ```
 
 License: MIT.

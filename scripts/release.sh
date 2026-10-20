@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 # Выпуск версии в GitHub Releases: собирает jar и прикладывает его к релизу v<version>.
 # Версия берётся из gradle.properties — перед новым релизом подними `version=`.
+#   ./scripts/release.sh [changes.md]  — changes.md (что нового) встаёт в начало описания релиза
 source "$(dirname "$0")/lib.sh"
+
+CHANGES="${1:-}"
+[[ -z "$CHANGES" || -f "$CHANGES" ]] || die "Нет файла $CHANGES"
 
 VERSION="$(grep -E '^version=' "$ROOT/gradle.properties" | cut -d= -f2)"
 FABRIC_API="$(grep -E '^fabric_api_version=' "$ROOT/gradle.properties" | cut -d= -f2)"
@@ -42,6 +46,10 @@ Particle Studio $VERSION dla Minecraft Java $MC_VERSION (Fabric). Mod działa ty
 **W grze:** naciśnij **J**. Przycisk „Preview” działa bez uprawnień; „Run” wymaga włączonych kodów (cheats) lub /op.
 EOF
 )"
+
+if [[ -n "$CHANGES" ]]; then
+	notes="$(cat "$CHANGES")"$'\n\n---\n\n'"$notes"
+fi
 
 (cd "$ROOT" && gh release create "$TAG" "$jar" --target main --title "Particle Studio $VERSION" --notes "$notes")
 info "Релиз $TAG опубликован"
