@@ -17,6 +17,8 @@ jar="$ROOT/build/libs/$MOD_ID-$VERSION.jar"
 git -C "$ROOT" push -q
 
 notes="$(cat <<EOF
+### English
+
 Particle Studio $VERSION for Minecraft Java $MC_VERSION (Fabric). Client-side mod: no need to install it on a server.
 
 **Requires:** Fabric Loader for $MC_VERSION and [Fabric API](https://modrinth.com/mod/fabric-api) ($FABRIC_API or newer).
@@ -26,6 +28,18 @@ Particle Studio $VERSION for Minecraft Java $MC_VERSION (Fabric). Client-side mo
 **Official launcher:** run the [Fabric Installer](https://fabricmc.net/use/installer/) for $MC_VERSION, put Fabric API and \`$(basename "$jar")\` into the \`mods\` folder (Windows: \`%APPDATA%\\.minecraft\\mods\`), start the Fabric profile.
 
 **In game:** press **J**. "Preview" works without permissions; "Run" needs cheats or /op.
+
+### Polski
+
+Particle Studio $VERSION dla Minecraft Java $MC_VERSION (Fabric). Mod działa tylko po stronie klienta: nie trzeba instalować go na serwerze.
+
+**Wymagane:** Fabric Loader dla $MC_VERSION i [Fabric API](https://modrinth.com/mod/fabric-api) ($FABRIC_API lub nowsze).
+
+**Modrinth App:** utwórz profil Fabric $MC_VERSION → Add content → zainstaluj Fabric API → Add content → From file → wybierz \`$(basename "$jar")\`.
+
+**Oficjalny launcher:** uruchom [Fabric Installer](https://fabricmc.net/use/installer/) dla $MC_VERSION, umieść Fabric API i \`$(basename "$jar")\` w folderze \`mods\` (Windows: \`%APPDATA%\\.minecraft\\mods\`), uruchom profil Fabric.
+
+**W grze:** naciśnij **J**. Przycisk „Preview” działa bez uprawnień; „Run” wymaga włączonych kodów (cheats) lub /op.
 EOF
 )"
 
