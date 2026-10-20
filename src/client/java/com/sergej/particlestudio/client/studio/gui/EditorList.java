@@ -72,17 +72,6 @@ public class EditorList extends ContainerObjectSelectionList<EditorList.Row> {
 	}
 
 	@Override
-	public boolean mouseScrolled(double x, double y, double scrollX, double scrollY) {
-		// Сначала колесо получает поле под курсором (NumberField меняет значение), потом список.
-		Row row = this.getEntryAtPosition(x, y);
-		if (row != null && row.mouseScrolled(x, y, scrollX, scrollY)) {
-			return true;
-		}
-
-		return super.mouseScrolled(x, y, scrollX, scrollY);
-	}
-
-	@Override
 	protected void extractListBackground(GuiGraphicsExtractor graphics) {
 	}
 

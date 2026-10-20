@@ -92,7 +92,6 @@
 	"particlestudio.motion.up": "Up",
 	"particlestudio.hint.motion_command": "Each point is its own command with the spread above",
 	"particlestudio.hint.motion_directed": "One particle per point, flying at «speed»",
-	"particlestudio.hint.scroll": "Mouse wheel: ±step, with Shift ±10 steps",
 	"particlestudio.status": "Commands in layer: %s · in effect: %s",
 	"particlestudio.nothing_to_run": "No enabled layers without errors",
 	"particlestudio.ran": "Commands sent: %s",
@@ -107,5 +106,11 @@
 	"particlestudio.pick": "Pick",
 	"particlestudio.delete": "Delete",
 	"particlestudio.collapse": "Collapse the panel — full screen for the effect",
-	"particlestudio.no_permission": "No permission for /particle: enable cheats (Open to LAN → Allow Cheats) or get /op. Preview works without it."
+	"particlestudio.no_permission": "No permission for /particle: enable cheats (Open to LAN → Allow Cheats) or get /op. Preview works without it.",
+	"key.particlestudio.preview": "Preview effect",
+	"key.particlestudio.run": "Run effect",
+	"key.particlestudio.toggle_repeat": "Toggle loop",
+	"particlestudio.settings": "Particle Studio settings",
+	"particlestudio.settings.keys_hint": "Click a button, then press a key or mouse button. Esc unbinds.",
+	"particlestudio.settings.conflict": "This key is already used by: %s"
 }

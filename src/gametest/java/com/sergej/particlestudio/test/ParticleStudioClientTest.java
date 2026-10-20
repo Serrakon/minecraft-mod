@@ -1,5 +1,6 @@
 package com.sergej.particlestudio.test;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.brigadier.ParseResults;
 import com.sergej.particlestudio.client.ParticleStudioClient;
 import com.sergej.particlestudio.client.studio.EffectCompiler;
@@ -9,13 +10,18 @@ import com.sergej.particlestudio.client.studio.ParticleLayer;
 import com.sergej.particlestudio.client.studio.ParticleOptionsHelper;
 import com.sergej.particlestudio.client.studio.gui.ParticleStudioScreen;
 import com.sergej.particlestudio.client.studio.gui.PickListScreen;
+import com.sergej.particlestudio.client.studio.gui.StudioSettingsScreen;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.nbt.CompoundTag;
@@ -134,6 +140,60 @@ public class ParticleStudioClientTest implements FabricClientGameTest {
 		}
 	}
 
+	/** Переназначение клавиши в настройках студии и быстрая клавиша повтора без открытой панели. */
+	private static void checkSettings(ClientGameTestContext context) {
+		context.clickScreenButton("⚙");
+		context.waitForScreen(StudioSettingsScreen.class);
+		context.takeScreenshot("settings");
+
+		// Подпись клавиши зависит от раскладки системы (J в русской — «О»), поэтому берём её у игры.
+		context.clickScreenButton(context.computeOnClient(mc -> ParticleStudioClient.OPEN_STUDIO.getTranslatedKeyMessage().getString()));
+		context.getInput().pressKey(InputConstants.KEY_K);
+		context.waitTicks(1);
+		context.takeScreenshot("settings-rebound");
+		InputConstants.Key bound = context.computeOnClient(mc -> KeyMappingHelper.getBoundKeyOf(ParticleStudioClient.OPEN_STUDIO));
+		if (bound.getValue() != InputConstants.KEY_K) {
+			throw new AssertionError("Open key was not rebound, got " + bound);
+		}
+
+		// Свободная клавиша: многие буквы в 26.3 заняты (O — «Друзья»).
+		context.runOnClient(mc -> {
+			ParticleStudioClient.OPEN_STUDIO.setKey(ParticleStudioClient.OPEN_STUDIO.getDefaultKey());
+			ParticleStudioClient.TOGGLE_REPEAT.setKey(freeKey(mc));
+			KeyMapping.resetMapping();
+		});
+		context.setScreen(() -> null);
+		context.waitTicks(1);
+		context.getInput().pressKey(ParticleStudioClient.TOGGLE_REPEAT);
+		context.waitTicks(2);
+		if (context.computeOnClient(mc -> EffectRunner.repeatMode()) != EffectRunner.RepeatMode.PREVIEW) {
+			throw new AssertionError("Toggle loop key did not start the preview loop");
+		}
+
+		context.waitTicks(10);
+		context.takeScreenshot("loop-hotkey");
+		context.getInput().pressKey(ParticleStudioClient.TOGGLE_REPEAT);
+		context.waitTicks(2);
+		if (context.computeOnClient(mc -> EffectRunner.repeatMode()) != EffectRunner.RepeatMode.OFF) {
+			throw new AssertionError("Toggle loop key did not stop the loop");
+		}
+
+		context.setScreen(ParticleStudioScreen::new);
+	}
+
+	private static InputConstants.Key freeKey(Minecraft mc) {
+		int[] candidates = {InputConstants.KEY_N, InputConstants.KEY_M, InputConstants.KEY_U, InputConstants.KEY_Y, InputConstants.KEY_H, InputConstants.KEY_G, InputConstants.KEY_V, InputConstants.KEY_Z};
+		for (int code : candidates) {
+			InputConstants.Key key = InputConstants.Type.KEYBOARD.getOrCreate(code);
+			boolean used = Arrays.stream(mc.options.keyMappings).anyMatch(m -> KeyMappingHelper.getBoundKeyOf(m).equals(key));
+			if (!used) {
+				return key;
+			}
+		}
+
+		throw new AssertionError("No free key for the test");
+	}
+
 	private static void checkScreen(ClientGameTestContext context) {
 		context.getInput().pressKey(ParticleStudioClient.OPEN_STUDIO);
 		context.waitForScreen(ParticleStudioScreen.class);
@@ -220,6 +280,8 @@ public class ParticleStudioClientTest implements FabricClientGameTest {
 		context.setScreen(ParticleStudioScreen::new);
 		context.waitTicks(2);
 		context.takeScreenshot("studio-flame");
+
+		checkSettings(context);
 
 		context.setScreen(() -> new PickListScreen(new ParticleStudioScreen(), Component.literal("Pick"),
 			new ArrayList<>(ParticleOptionsHelper.allIds()), Component::literal, id -> { }, null));

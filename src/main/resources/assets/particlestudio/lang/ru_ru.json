@@ -92,7 +92,6 @@
 	"particlestudio.motion.up": "Вверх",
 	"particlestudio.hint.motion_command": "Каждая точка — своя команда с разбросом выше",
 	"particlestudio.hint.motion_directed": "По 1 частице на точку, летит со «скоростью»",
-	"particlestudio.hint.scroll": "Колесо мыши: ±шаг, с Shift ±10 шагов",
 	"particlestudio.status": "Команд в слое: %s · во всём эффекте: %s",
 	"particlestudio.nothing_to_run": "Нет включённых слоёв без ошибок",
 	"particlestudio.ran": "Отправлено команд: %s",
@@ -107,5 +106,11 @@
 	"particlestudio.pick": "Выбрать",
 	"particlestudio.delete": "Удалить",
 	"particlestudio.collapse": "Свернуть панель — весь экран под эффект",
-	"particlestudio.no_permission": "Нет прав на /particle: включи читы (Открыть для сети → Читы) или получи /op. Превью работает без прав."
+	"particlestudio.no_permission": "Нет прав на /particle: включи читы (Открыть для сети → Читы) или получи /op. Превью работает без прав.",
+	"key.particlestudio.preview": "Превью эффекта",
+	"key.particlestudio.run": "Выполнить эффект",
+	"key.particlestudio.toggle_repeat": "Повтор вкл/выкл",
+	"particlestudio.settings": "Настройки Particle Studio",
+	"particlestudio.settings.keys_hint": "Нажми кнопку, затем клавишу или кнопку мыши. Esc — снять назначение.",
+	"particlestudio.settings.conflict": "Эта клавиша уже занята: %s"
 }

@@ -43,7 +43,10 @@ Check changes to the studio UI or logic with `./scripts/test.sh` (a game window 
 - generates a command for **every** particle type and parses it with the server's `/particle` parser;
 - checks every shape and position mode;
 - clicks studio buttons and takes screenshots into `build/run/clientGameTest/screenshots/` — **open and look at them**, it is the only way to see the UI;
-- checks that without cheats "Run" sends no commands, and with cheats the server's replies stay out of chat.
+- checks that without cheats "Run" sends no commands, and with cheats the server's replies stay out of chat;
+- rebinds a key in the settings screen and presses the loop hotkey with the panel closed.
+
+Key labels follow the OS keyboard layout (J shows as «О» with a Russian layout), so tests must never look up key buttons by a hardcoded letter. Many letters are taken by vanilla in 26.3 (O opens Friends) — pick test keys that no mapping uses.
 
 Add new scenarios to this test. Buttons are clicked by text (`clickScreenButton("particlestudio.run")` — a translation key or a literal); buttons inside `EditorList` cannot be found this way.
 
@@ -75,7 +78,7 @@ src/main/resources/
   data/particlestudio/                     recipe/, loot_table/, tags/
 src/main/generated/                        datagen output — do not edit by hand
 src/client/java/com/sergej/particlestudio/client/
-  ParticleStudioClient.java                ClientModInitializer: J key, repeat ticks, chat filter
+  ParticleStudioClient.java                ClientModInitializer: key mappings (KEYS), repeat ticks, chat filter
   studio/                                  Particle Studio — model and logic, no GUI
     ParticleEffect, ParticleLayer          effect = layers; layer = one /particle (+ shape). POJOs -> Gson presets
     ParticleOptionsHelper                  particle option templates (SNBT), validation through the type's codec
@@ -84,6 +87,7 @@ src/client/java/com/sergej/particlestudio/client/
     PresetStore                            config/particlestudio/presets/*.json, functions/*.mcfunction, last_session.json
   studio/gui/                              studio screens and widgets
     ParticleStudioScreen                   panel on the left; the options editor is built from the particle's SNBT
+    StudioSettingsScreen                   rebinding the mod's keys (the ⚙ button in the panel)
     EditorList, NumberField, ChannelSlider, ColorSwatch, PickListScreen
   datagen/ParticleStudioDataGenerator.java datagen providers
   mixin/                                   client mixins -> particlestudio.client.mixins.json

@@ -17,7 +17,7 @@ You need Fabric Loader for 26.3 and [Fabric API](https://modrinth.com/mod/fabric
 
 **Official launcher:** run the [Fabric Installer](https://fabricmc.net/use/installer/) for 26.3, put Fabric API and the mod jar into the `mods` folder (on Windows: `%APPDATA%\.minecraft\mods`), and start the Fabric profile.
 
-In game, press **J** to open the panel. The key can be changed in the Controls settings.
+In game, press **J** to open the panel. Keys are changed with the **⚙** button in the panel (or in the game's Controls settings). Besides opening the panel, you can bind hotkeys that work with the panel closed: preview the effect, run it, and toggle the loop. They are unbound by default.
 
 Presets and exported functions are stored in the game folder: `config/particlestudio/`.
 

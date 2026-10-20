@@ -109,6 +109,11 @@ public class ParticleStudioScreen extends Screen {
 		collapse.setTooltip(Tooltip.create(t("collapse")));
 		this.addRenderableWidget(collapse);
 
+		Button settings = Button.builder(Component.literal("⚙"), b -> this.minecraft.gui.setScreen(new StudioSettingsScreen(this)))
+			.bounds(this.panelWidth - 34, 2, 14, 12).build();
+		settings.setTooltip(Tooltip.create(t("settings")));
+		this.addRenderableWidget(settings);
+
 		EditBox name = new EditBox(this.font, left + 34, 16, w - 34, 18, t("name"));
 		name.setMaxLength(64);
 		name.setValue(effect().name);
@@ -205,7 +210,7 @@ public class ParticleStudioScreen extends Screen {
 
 		this.addRenderableWidget(this.repeatButton(left + 2 * (quarter + 2), y1, quarter + 20));
 
-		NumberField interval = new NumberField(this.font, effect().repeatTicks, 1, true, 1, v -> effect().repeatTicks = (int) v);
+		NumberField interval = new NumberField(this.font, effect().repeatTicks, true, 1, v -> effect().repeatTicks = (int) v);
 		interval.setRectangle(w - (3 * quarter + 26), 20, left + 3 * quarter + 26, y1);
 		interval.setTooltip(Tooltip.create(t("repeat.interval")));
 		this.addRenderableWidget(interval);
@@ -247,9 +252,9 @@ public class ParticleStudioScreen extends Screen {
 				this.rebuildEditor();
 			}));
 		this.editor.row(t(layer.positionMode == ParticleLayer.PositionMode.LOCAL ? "local_xyz" : "xyz"),
-			this.number(layer.x, 0.25, ANY, v -> layer.x = v),
-			this.number(layer.y, 0.25, ANY, v -> layer.y = v),
-			this.number(layer.z, 0.25, ANY, v -> layer.z = v));
+			this.number(layer.x, ANY, v -> layer.x = v),
+			this.number(layer.y, ANY, v -> layer.y = v),
+			this.number(layer.z, ANY, v -> layer.z = v));
 		if (layer.positionMode == ParticleLayer.PositionMode.ABSOLUTE) {
 			this.editor.row(null,
 				Button.builder(t("position.here"), b -> this.setAbsolute(layer, this.minecraft.player.position())).build(),
@@ -260,11 +265,11 @@ public class ParticleStudioScreen extends Screen {
 
 		this.editor.header(t("section.motion"));
 		this.editor.row(t("delta"),
-			this.number(layer.dx, 0.1, ANY, v -> layer.dx = v),
-			this.number(layer.dy, 0.1, ANY, v -> layer.dy = v),
-			this.number(layer.dz, 0.1, ANY, v -> layer.dz = v));
+			this.number(layer.dx, ANY, v -> layer.dx = v),
+			this.number(layer.dy, ANY, v -> layer.dy = v),
+			this.number(layer.dz, ANY, v -> layer.dz = v));
 		this.editor.row(t("speed_count"),
-			this.number(layer.speed, 0.01, 0.0, v -> layer.speed = v),
+			this.number(layer.speed, 0.0, v -> layer.speed = v),
 			this.integer(layer.count, 0, v -> layer.count = (int) v));
 		this.editor.row(t("force"), CycleButton.booleanBuilder(t("force.on"), t("force.off"), layer.force)
 			.displayOnlyValue()
@@ -305,16 +310,16 @@ public class ParticleStudioScreen extends Screen {
 			case SPHERE -> this.radiusAndPoints(layer);
 			case LINE -> {
 				this.editor.row(t("line_end"),
-					this.number(layer.lineX, 0.5, ANY, v -> layer.lineX = v),
-					this.number(layer.lineY, 0.5, ANY, v -> layer.lineY = v),
-					this.number(layer.lineZ, 0.5, ANY, v -> layer.lineZ = v));
+					this.number(layer.lineX, ANY, v -> layer.lineX = v),
+					this.number(layer.lineY, ANY, v -> layer.lineY = v),
+					this.number(layer.lineZ, ANY, v -> layer.lineZ = v));
 				this.editor.row(t("points"), this.integer(layer.points, 1, v -> layer.points = (int) v));
 			}
 			case HELIX -> {
 				this.radiusAndPoints(layer);
 				this.editor.row(t("height_turns"),
-					this.number(layer.height, 0.25, ANY, v -> layer.height = v),
-					this.number(layer.turns, 0.25, ANY, v -> layer.turns = v));
+					this.number(layer.height, ANY, v -> layer.height = v),
+					this.number(layer.turns, ANY, v -> layer.turns = v));
 			}
 		}
 
@@ -331,7 +336,7 @@ public class ParticleStudioScreen extends Screen {
 
 	private void radiusAndPoints(ParticleLayer layer) {
 		this.editor.row(t("radius_points"),
-			this.number(layer.radius, 0.25, 0.0, v -> layer.radius = v),
+			this.number(layer.radius, 0.0, v -> layer.radius = v),
 			this.integer(layer.points, 1, v -> layer.points = (int) v));
 	}
 
@@ -396,8 +401,7 @@ public class ParticleStudioScreen extends Screen {
 				this.addColorRows(tag, key, label, color);
 			} else if (value instanceof NumericTag numeric) {
 				boolean whole = !(numeric instanceof FloatTag || numeric instanceof DoubleTag);
-				double step = whole ? 1.0 : 0.1;
-				NumberField field = new NumberField(this.font, numeric.doubleValue(), step, whole, ANY, v -> {
+				NumberField field = new NumberField(this.font, numeric.doubleValue(), whole, ANY, v -> {
 					tag.put(key, sameKind(numeric, v));
 					this.optionsChanged();
 				});
@@ -484,7 +488,7 @@ public class ParticleStudioScreen extends Screen {
 		int fieldWidth = (this.editor.getRowWidth() - EditorList.LABEL_WIDTH - 20 - 6) / 3;
 		for (int i = 0; i < 3; i++) {
 			int axis = i;
-			fields[i] = new NumberField(this.font, v[i], ints ? 1.0 : 0.25, ints, ANY, d -> {
+			fields[i] = new NumberField(this.font, v[i], ints, ANY, d -> {
 				v[axis] = d;
 				write.run();
 			});
@@ -556,15 +560,15 @@ public class ParticleStudioScreen extends Screen {
 		this.updateStatus();
 	}
 
-	private NumberField number(double value, double step, double min, DoubleConsumer setter) {
-		return new NumberField(this.font, value, step, false, min, v -> {
+	private NumberField number(double value, double min, DoubleConsumer setter) {
+		return new NumberField(this.font, value, false, min, v -> {
 			setter.accept(v);
 			this.updateStatus();
 		});
 	}
 
 	private NumberField integer(int value, int min, DoubleConsumer setter) {
-		return new NumberField(this.font, value, 1, true, min, v -> {
+		return new NumberField(this.font, value, true, min, v -> {
 			setter.accept(v);
 			this.updateStatus();
 		});

@@ -24,6 +24,7 @@ public final class EffectRunner {
 	private static int pendingFeedback;
 	private static long feedbackDeadline;
 	private static RepeatMode repeatMode = RepeatMode.OFF;
+	private static RepeatMode lastActiveRepeat = RepeatMode.PREVIEW;
 	private static int ticksUntilRepeat;
 	private static boolean loaded;
 
@@ -52,8 +53,18 @@ public final class EffectRunner {
 	}
 
 	public static void setRepeatMode(RepeatMode mode) {
+		if (mode != RepeatMode.OFF) {
+			lastActiveRepeat = mode;
+		}
+
 		repeatMode = mode;
 		ticksUntilRepeat = 0;
+	}
+
+	/** Клавиша повтора: выключает, а при включении возвращает последний режим (сначала — превью). */
+	public static RepeatMode toggleRepeat() {
+		setRepeatMode(repeatMode == RepeatMode.OFF ? lastActiveRepeat : RepeatMode.OFF);
+		return repeatMode;
 	}
 
 	public static void tick(Minecraft minecraft) {
